@@ -58,7 +58,7 @@ app.post("/webhook", (req, res) => {
         reply_message =
           "Okay, please provide the name and quantity of the product you want to order.";
       } else {
-        reply_message = `Hi.. I'm Prasath, your message is ${message_body}`;
+        reply_message = `Hi.. This is BansalPolymer, your message is ${message_body}`;
       }
 
       axios({
