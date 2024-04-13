@@ -75,8 +75,7 @@ app.post("/webhook", (req, res) => {
       let reply_message;
       if (message_body.includes("I want to place order")) {
         reply_message =
-          "Okay, please provide the name and quantity of the product you want to order." +
-          invoice;
+          "Okay, please provide the name and quantity of the product you want to order.";
       } else if (message_body.includes("I want 100kg of Product2")) {
         reply_message =
           "Okay, let me check the availability. It's available. Placing your order now.";
