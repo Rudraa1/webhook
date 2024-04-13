@@ -53,13 +53,35 @@ app.post("/webhook", (req, res) => {
       console.log("body param: " + message_body);
 
       // Define specific replies based on message content
+      // let reply_message;
+      // if (message_body.includes("I want to place order")) {
+      //   reply_message =
+      //     "Okay, please provide the name and quantity of the product you want to order.";
+      // } elseIf(message_body.includes("I want 100kg of Product2")){
+      //   reply_message =
+      //   "Okay, let me check the availability. It's available. Placing your order now"
+
+      // }elseIf(message_body.includes("I want 270kg of Product3")){
+      //   reply_message =
+      //   "Okay, let me check the availability. It's not available."
+
+      // }else {
+      //   // reply_message = `Hi.. This is BansalPolymer, your message is ${message_body}`;
+      //   reply_message = `Hi.. This is BansalPolymer, how can we help you!`;
+      // }
+
       let reply_message;
       if (message_body.includes("I want to place order")) {
         reply_message =
           "Okay, please provide the name and quantity of the product you want to order.";
+      } else if (message_body.includes("I want 100kg of Product2")) {
+        reply_message =
+          "Okay, let me check the availability. It's available. Placing your order now.";
+      } else if (message_body.includes("I want 270kg of Product3")) {
+        reply_message =
+          "Okay, let me check the availability. It's not available.";
       } else {
-        // reply_message = `Hi.. This is BansalPolymer, your message is ${message_body}`;
-        reply_message = `Hi.. This is BansalPolymer, how can we help you!`;
+        reply_message = "Hi.. This is BansalPolymer, how can we help you!";
       }
 
       axios({
