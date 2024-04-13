@@ -76,14 +76,14 @@ app.post("/webhook", (req, res) => {
       if (message_body.includes("I want to place order")) {
         reply_message =
           "Okay, here is today's price list:\n1. Product1=Rs.234/-\n2. Product2=Rs.130/-\n3. Product3=Rs107/-\nTo place an order, please provide the name and quantity of the product you want to order.";
-      } else if (message_body.includes("I want 100kg of Product2")) {
+      } else if (message_body.includes("I want 100kg of product 2")) {
         reply_message =
           "Okay, let me check the availability. It's available. Placing your order now.";
-      } else if (message_body.includes("I want 270kg of Product3")) {
+      } else if (message_body.includes("I want 270kg of product 3")) {
         reply_message =
           "Okay, let me check the availability. It's not available.";
       } else {
-        reply_message = "Hi.. This is BansalPolymer, how can we help you!";
+        reply_message = "Hi.. This is Bansal Polymer, how can we help you!";
       }
 
       axios({
