@@ -70,10 +70,13 @@ app.post("/webhook", (req, res) => {
       //   reply_message = `Hi.. This is BansalPolymer, how can we help you!`;
       // }
 
+      let invoice = `C:\Users\mohit\Downloads`;
+
       let reply_message;
       if (message_body.includes("I want to place order")) {
         reply_message =
-          "Okay, please provide the name and quantity of the product you want to order.";
+          "Okay, please provide the name and quantity of the product you want to order." +
+          invoice;
       } else if (message_body.includes("I want 100kg of Product2")) {
         reply_message =
           "Okay, let me check the availability. It's available. Placing your order now.";
