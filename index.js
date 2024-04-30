@@ -15,109 +15,19 @@ app.listen(process.env.PORT || 3000, () => {
 });
 
 // //to verify the callback url from dashboard side - cloud api side
-// app.get("/webhook", (req, res) => {
-//   let mode = req.query["hub.mode"];
-//   let challange = req.query["hub.challenge"];
-//   let token = req.query["hub.verify_token"];
+app.get("/webhook", (req, res) => {
+  let mode = req.query["hub.mode"];
+  let challange = req.query["hub.challenge"];
+  let token = req.query["hub.verify_token"];
 
-//   if (mode && token) {
-//     if (mode === "subscribe" && token === mytoken) {
-//       res.status(200).send(challange);
-//     } else {
-//       res.status(403);
-//     }
-//   }
-// });
-
-// app.post("/webhook", (req, res) => {
-//   let body_param = req.body;
-
-//   console.log(JSON.stringify(body_param, null, 2));
-
-//   if (body_param.object) {
-//     console.log("inside body param");
-//     if (
-//       body_param.entry &&
-//       body_param.entry[0].changes &&
-//       body_param.entry[0].changes[0].value.messages &&
-//       body_param.entry[0].changes[0].value.messages[0]
-//     ) {
-//       let phone_number_id =
-//         body_param.entry[0].changes[0].value.metadata.phone_number_id;
-//       let from = body_param.entry[0].changes[0].value.messages[0].from;
-//       let message_body =
-//         body_param.entry[0].changes[0].value.messages[0].text.body;
-
-//       console.log("phone number: " + phone_number_id);
-//       console.log("from: " + from);
-//       console.log("body param: " + message_body);
-
-//       // Define specific replies based on message content
-//       let reply_message;
-//       let button_url;
-//       let buttons = [];
-
-//       if (message_body.includes("I want 100kg of product 2")) {
-//         reply_message =
-//           "Okay, let me check the availability. It's available. Placing your order now.";
-
-//         // Add buttons for user response
-//         buttons = [
-//           {
-//             type: "web_url",
-//             title: "Yes",
-//             url: "https://example.com/place-order",
-//           },
-//           {
-//             type: "web_url",
-//             title: "No",
-//             url: "https://example.com/cancel-order",
-//           },
-//         ];
-//       } else if (message_body.includes("I want 270kg of product 3")) {
-//         reply_message =
-//           "Okay, let me check the availability. It's not available.";
-//       } else {
-//         reply_message = "Hi.. This is Bansal Polymer, how can we help you!";
-//         button_url = "https://example.com/";
-//       }
-
-//       // Construct message with buttons
-//       let button_message = {
-//         messaging_product: "whatsapp",
-//         to: from,
-//         text: {
-//           body: reply_message,
-//           buttons: buttons,
-//         },
-//       };
-
-//       // Send message with buttons
-//       axios({
-//         method: "POST",
-//         url: `https://graph.facebook.com/v13.0/${phone_number_id}/messages?access_token=${token}`,
-//         data: button_message,
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       })
-//         .then(() => {
-//           console.log("Reply sent successfully");
-//           res.sendStatus(200);
-//         })
-//         .catch((error) => {
-//           console.error("Error sending reply:", error);
-//           res.status(500).send("Error sending reply");
-//         });
-//     } else {
-//       res.sendStatus(404);
-//     }
-//   } else {
-//     res.sendStatus(400);
-//   }
-// });
-
-// // const JAVA_BACKEND_URL = 'http://your-java-backend-url/webhook'
+  if (mode && token) {
+    if (mode === "subscribe" && token === mytoken) {
+      res.status(200).send(challange);
+    } else {
+      res.status(403);
+    }
+  }
+});
 
 app.post("/webhook", (req, res) => {
   let body_param = req.body;
@@ -143,33 +53,50 @@ app.post("/webhook", (req, res) => {
       console.log("body param: " + message_body);
 
       // Define specific replies based on message content
-
-      let invoice = `C:\Users\mohit\Downloads`;
-
       let reply_message;
-      if (message_body.includes("I want to place order")) {
-        reply_message =
-          "Okay, here is today's price list:\n1. Product1=Rs.234/-\n2. Product2=Rs.130/-\n3. Product3=Rs107/-\nTo place an order, please provide the name and quantity of the product you want to order.";
-      } else if (message_body.includes("I want 100kg of product 2")) {
+      let button_url;
+      let buttons = [];
+
+      if (message_body.includes("I want 100kg of product 2")) {
         reply_message =
           "Okay, let me check the availability. It's available. Placing your order now.";
+
+        // Add buttons for user response
+        buttons = [
+          {
+            type: "web_url",
+            title: "Yes",
+            url: "https://example.com/place-order",
+          },
+          {
+            type: "web_url",
+            title: "No",
+            url: "https://example.com/cancel-order",
+          },
+        ];
       } else if (message_body.includes("I want 270kg of product 3")) {
         reply_message =
           "Okay, let me check the availability. It's not available.";
       } else {
         reply_message = "Hi.. This is Bansal Polymer, how can we help you!";
+        button_url = "https://example.com/";
       }
 
+      // Construct message with buttons
+      let button_message = {
+        messaging_product: "whatsapp",
+        to: from,
+        text: {
+          body: reply_message,
+          buttons: buttons,
+        },
+      };
+
+      // Send message with buttons
       axios({
         method: "POST",
         url: `https://graph.facebook.com/v13.0/${phone_number_id}/messages?access_token=${token}`,
-        data: {
-          messaging_product: "whatsapp",
-          to: from,
-          text: {
-            body: reply_message,
-          },
-        },
+        data: button_message,
         headers: {
           "Content-Type": "application/json",
         },
@@ -189,6 +116,79 @@ app.post("/webhook", (req, res) => {
     res.sendStatus(400);
   }
 });
+
+// // const JAVA_BACKEND_URL = 'http://your-java-backend-url/webhook'
+
+// app.post("/webhook", (req, res) => {
+//   let body_param = req.body;
+
+//   console.log(JSON.stringify(body_param, null, 2));
+
+//   if (body_param.object) {
+//     console.log("inside body param");
+//     if (
+//       body_param.entry &&
+//       body_param.entry[0].changes &&
+//       body_param.entry[0].changes[0].value.messages &&
+//       body_param.entry[0].changes[0].value.messages[0]
+//     ) {
+//       let phone_number_id =
+//         body_param.entry[0].changes[0].value.metadata.phone_number_id;
+//       let from = body_param.entry[0].changes[0].value.messages[0].from;
+//       let message_body =
+//         body_param.entry[0].changes[0].value.messages[0].text.body;
+
+//       console.log("phone number: " + phone_number_id);
+//       console.log("from: " + from);
+//       console.log("body param: " + message_body);
+
+//       // Define specific replies based on message content
+
+//       let invoice = `C:\Users\mohit\Downloads`;
+
+//       let reply_message;
+//       if (message_body.includes("I want to place order")) {
+//         reply_message =
+//           "Okay, here is today's price list:\n1. Product1=Rs.234/-\n2. Product2=Rs.130/-\n3. Product3=Rs107/-\nTo place an order, please provide the name and quantity of the product you want to order.";
+//       } else if (message_body.includes("I want 100kg of product 2")) {
+//         reply_message =
+//           "Okay, let me check the availability. It's available. Placing your order now.";
+//       } else if (message_body.includes("I want 270kg of product 3")) {
+//         reply_message =
+//           "Okay, let me check the availability. It's not available.";
+//       } else {
+//         reply_message = "Hi.. This is Bansal Polymer, how can we help you!";
+//       }
+
+//       axios({
+//         method: "POST",
+//         url: `https://graph.facebook.com/v13.0/${phone_number_id}/messages?access_token=${token}`,
+//         data: {
+//           messaging_product: "whatsapp",
+//           to: from,
+//           text: {
+//             body: reply_message,
+//           },
+//         },
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//       })
+//         .then(() => {
+//           console.log("Reply sent successfully");
+//           res.sendStatus(200);
+//         })
+//         .catch((error) => {
+//           console.error("Error sending reply:", error);
+//           res.status(500).send("Error sending reply");
+//         });
+//     } else {
+//       res.sendStatus(404);
+//     }
+//   } else {
+//     res.sendStatus(400);
+//   }
+// });
 
 app.get("/", (req, res) => {
   res.status(200).send("hello this is webhook setup");
