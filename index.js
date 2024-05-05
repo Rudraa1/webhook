@@ -308,7 +308,8 @@ app.use(bodyParser.json());
 const mytoken = process.env.MYTOKEN;
 const token = process.env.TOKEN;
 const JAVA_BACKEND_BASE_URL =
-  process.env.JAVA_BACKEND_URL || "http://localhost:8080/webhook"; // Update with your Java backend URL
+  process.env.JAVA_BACKEND_URL ||
+  "http://wa-service.ap-south-1.elasticbeanstalk.com/webhook"; // Update with your Java backend URL
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello, this is the webhook setup");
